@@ -1,6 +1,5 @@
 {
-  
-  "bundleDependencies": false,
+  "name": "videojs-hls-quality-selector",
   "dependencies": {
     "global": "^4.3.2",
     "karma-safaritechpreview-launcher": "0.0.6",
@@ -64,7 +63,6 @@
   "license": "MIT",
   "main": "dist/videojs-hls-quality-selector.cjs.js",
   "module": "dist/videojs-hls-quality-selector.es.js",
-  "name": "videojs-hls-quality-selector",
   "scripts": {
     "build": "npm-run-all -p build:*",
     "build:css": "npm-run-all build:css:sass build:css:bannerize",
