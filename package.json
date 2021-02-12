@@ -1,5 +1,36 @@
 {
-  "name": "videojs-hls-quality-selector",
+  "_from": "git+https://github.com/gopanisandip/videojs-hls-quality-selector.git",
+  "_id": "videojs-hls-quality-selector@0.0.8",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/videojs-hls-quality-selector",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "videojs-hls-quality-selector@git+https://github.com/gopanisandip/videojs-hls-quality-selector.git",
+    "name": "videojs-hls-quality-selector",
+    "escapedName": "videojs-hls-quality-selector",
+    "rawSpec": "git+https://github.com/gopanisandip/videojs-hls-quality-selector.git",
+    "saveSpec": "git+https://github.com/gopanisandip/videojs-hls-quality-selector.git",
+    "fetchSpec": "https://github.com/gopanisandip/videojs-hls-quality-selector.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "/",
+    "/vue-video-player"
+  ],
+  "_resolved": "git+https://github.com/gopanisandip/videojs-hls-quality-selector.git#a9ad1232551b64691e576cda581116c44641e6c5",
+  "_shasum": "cda8d5ce49f76f835b8ac75df9ee47b1d740d934",
+  "_spec": "videojs-hls-quality-selector@git+https://github.com/gopanisandip/videojs-hls-quality-selector.git",
+  "_where": "/home/g51/projects/adilo/www/vue-webpack",
+  "author": {
+    "name": "Chris Boustead",
+    "url": "chris@forgemotion.com"
+  },
+  "bugs": {
+    "url": "https://github.com/chrisboustead/videojs-hls-quality-selector/issues"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "global": "^4.3.2",
     "karma-safaritechpreview-launcher": "0.0.6",
@@ -56,6 +87,7 @@
   "generator-videojs-plugin": {
     "version": "5.0.3"
   },
+  "homepage": "https://github.com/chrisboustead/videojs-hls-quality-selector#readme",
   "keywords": [
     "videojs",
     "videojs-plugin"
@@ -63,6 +95,11 @@
   "license": "MIT",
   "main": "dist/videojs-hls-quality-selector.cjs.js",
   "module": "dist/videojs-hls-quality-selector.es.js",
+  "name": "videojs-hls-quality-selector",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisboustead/videojs-hls-quality-selector.git"
+  },
   "scripts": {
     "build": "npm-run-all -p build:*",
     "build:css": "npm-run-all build:css:sass build:css:bannerize",
