@@ -1,5 +1,7 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
+import ConcreteButton from './ConcreteButton';
+import ConcreteMenuItem from './ConcreteMenuItem';
 
 // Default options for the plugin.
 const defaults = {};
@@ -21,6 +23,7 @@ class HlsQualitySelectorPlugin {
    */
   constructor(player, options) {
     this.player = player;
+    this.config = options;
 
     // If there is quality levels plugin and the HLS tech exists
     // then continue.
@@ -53,95 +56,47 @@ class HlsQualitySelectorPlugin {
   createQualityButton() {
 
     const player = this.player;
-    const videoJsButtonClass = videojs.getComponent('MenuButton');
 
-    /**
-     * Extend vjs button class for quality button.
-     */
-    class ConcreteButtonClass extends videoJsButtonClass {
-
-      /**
-       * Button constructor.
-       */
-      constructor() {
-        super(player, {title: player.localize('Quality')});
-      }
-
-      /**
-       * Creates button items.
-       *
-       * @return {Array} - Button items
-       */
-      createItems() {
-        return [];
-      }
-    }
-
-    this._qualityButton = new ConcreteButtonClass();
+    this._qualityButton = new ConcreteButton(player);
 
     const placementIndex = player.controlBar.children().length - 2;
     const concreteButtonInstance = player.controlBar.addChild(this._qualityButton,
       {componentClass: 'qualitySelector'},
-      placementIndex);
+      this.config.placementIndex || placementIndex);
 
-      concreteButtonInstance.addClass('vjs-quality-selector');
-      document.querySelector('.vjs-control-bar .vjs-quality-selector').className += ' vjs-icon-hd';
-      concreteButtonInstance.removeClass('vjs-hidden');
+    concreteButtonInstance.addClass('vjs-quality-selector');
+    if (!this.config.displayCurrentQuality) {
+      const icon = ` ${this.config.vjsIconClass || 'vjs-icon-hd'}`;
 
+      concreteButtonInstance
+        .menuButton_.$('.vjs-icon-placeholder').className += icon;
+    } else {
+      this.setButtonInnerText('auto');
+    }
+    concreteButtonInstance.removeClass('vjs-hidden');
+
+  }
+
+  /**
+   *Set inner button text.
+   *
+   * @param {string} text - the text to display in the button.
+   */
+  setButtonInnerText(text) {
+    this._qualityButton
+      .menuButton_.$('.vjs-icon-placeholder').innerHTML = text;
   }
 
   /**
    * Builds individual quality menu items.
    *
    * @param {Object} item - Individual quality menu item.
-   * @return {ConcreteMenuItemClass} - Menu item
+   * @return {ConcreteMenuItem} - Menu item
    */
   getQualityMenuItem(item) {
     const player = this.player;
-    const videoJsMenuItemClass = videojs.getComponent('MenuItem');
 
-    /**
-     * Extend vjs menu item class.
-     */
-    class ConcreteMenuItemClass extends videoJsMenuItemClass {
-
-      /**
-       * Menu item constructor.
-       *
-       * @param {Player} _player - vjs player
-       * @param {Object} _item - Item object
-       * @param {ConcreteButtonClass} qualityButton - The containing button.
-       * @param {HlsQualitySelectorPlugin} _plugin - This plugin instance.
-       */
-      constructor(_player, _item, qualityButton, _plugin) {
-        super(_player, {
-          label: item.label,
-          selectable: true,
-          selected: item.selected || false
-        });
-        this.item = _item;
-        this.qualityButton = qualityButton;
-        this.plugin = _plugin;
-      }
-
-      /**
-       * Click event for menu item.
-       */
-      handleClick() {
-
-        // Reset other menu items selected status.
-        for (let i = 0; i < this.qualityButton.items.length; ++i) {
-          this.qualityButton.items[i].selected(false);
-        }
-
-        // Set this menu item to selected, and set quality.
-        this.plugin.setQuality(this.item.value);
-        this.selected(true);
-
-      }
-    }
-
-    return new ConcreteMenuItemClass(player, item, this._qualityButton, this);
+    return new ConcreteMenuItem(player, item, this._qualityButton, this);
   }
 
   /**
@@ -203,12 +158,28 @@ class HlsQualitySelectorPlugin {
   setQuality(height) {
     const qualityList = this.player.qualityLevels();
 
+    // Set quality on plugin
+    this._currentQuality = height;
+
+    if (this.config.displayCurrentQuality) {
+      this.setButtonInnerText(height === 'auto' ? height : `${height}p`);
+    }
+
     for (let i = 0; i < qualityList.length; ++i) {
       const quality = qualityList[i];
 
       quality.enabled = (quality.height === height || height === 'auto');
     }
     this._qualityButton.unpressButton();
+  }
+
+  /**
+   * Return the current set quality or 'auto'
+   *
+   * @return {string} the currently set quality
+   */
+  getCurrentQuality() {
+    return this._currentQuality || 'auto';
   }
 
 }
